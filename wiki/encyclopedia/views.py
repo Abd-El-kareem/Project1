@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django import forms
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
+from random import choice
 
 class NewEntryForm(forms.Form):
     title = forms.CharField(label="Title")
@@ -47,3 +48,8 @@ def create(request):
     return render(request, "encyclopedia/create.html", {
         "form": NewEntryForm()
     })
+
+def random_entry(request):
+    entries = util.list_entries()
+    entry = choice(entries)
+    return HttpResponseRedirect(f'/wiki/{entry}')
