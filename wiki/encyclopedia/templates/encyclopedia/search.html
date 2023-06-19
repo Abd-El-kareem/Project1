@@ -1,0 +1,20 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Search
+{% endblock %}
+
+{% block body %}
+    {% if entry %}
+        {{ entry }}
+    {% else %}
+        {% if possibilities %}
+            <strong>Do You Mean:</strong>
+            {% for possibility in possibilities %}
+                <li><a href="wiki/{{ possibility }}">{{ possibility }}</a></li>
+            {% endfor %}
+        {% else %}
+            <p>Page Not Found</p>
+        {% endif %}
+    {% endif %}
+{% endblock %}
