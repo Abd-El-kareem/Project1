@@ -7,6 +7,10 @@
 {% block body %}
     {% if entry %}
          {{ entry }}
+         <form method="post">
+            {% csrf_token %}
+            <input type="submit" value="Edit the Page">
+         </form>
     {% else %}
         <p>Page Not Found</p>
     {% endif %}

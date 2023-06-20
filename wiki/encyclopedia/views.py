@@ -7,6 +7,10 @@ class NewEntryForm(forms.Form):
     title = forms.CharField(label="Title")
     content = forms.CharField(widget=forms.Textarea(attrs={'name':'body', 'rows':3, 'cols':5, 'style': 'height: 15em;'}))
 
+class NewEditForm(forms.Form):
+        content = forms.CharField(widget=forms.Textarea(attrs={'name':'body', 'rows':3, 'cols':5, 'style': 'height: 15em;'}), initial=f'')
+    
+
 from . import util
 
 
@@ -16,6 +20,9 @@ def index(request):
     })
 
 def wiki(request, title):
+    if request.method == "POST":
+        return HttpResponseRedirect(f'/edit/{title}')
+    
     return render(request, "encyclopedia/wiki.html", {
         "entry": util.get_entry(title)
     })
@@ -53,3 +60,18 @@ def random_entry(request):
     entries = util.list_entries()
     entry = choice(entries)
     return HttpResponseRedirect(f'/wiki/{entry}')
+
+def edit(request, title):
+    entry = util.get_entry(title)
+    form = NewEditForm()
+    form['content'].initial = entry
+    if request.method == "POST":
+        form = NewEditForm(request.POST)
+        if form.is_valid():
+              content = form.cleaned_data["content"]
+              util.save_entry(title, content)
+              return HttpResponseRedirect(f'/wiki/{title}')
+
+    return render(request, 'encyclopedia/edit.html', {
+        "form": form
+    })
