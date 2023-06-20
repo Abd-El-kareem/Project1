@@ -39,7 +39,7 @@ def search(request):
                     possibilities.append(element)
     return render(request, "encyclopedia/search.html", {
         "possibilities": possibilities,
-        "entry": util.get_entry(entry) 
+        "entry": util.convert_to_HTML(entry) 
     })
 
 def create(request):
